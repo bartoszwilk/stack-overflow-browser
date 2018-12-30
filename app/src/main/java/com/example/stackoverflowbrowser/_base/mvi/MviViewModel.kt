@@ -6,5 +6,5 @@ interface MviViewModel<I : MviIntent, S : MviViewState> {
 
     fun processIntents(intents: Observable<I>)
 
-    fun states(): Observable<S>
+    val states: Observable<S>
 }
