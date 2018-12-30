@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity
 import com.example.stackoverflowbrowser.R
 import com.example.stackoverflowbrowser._base.mvi.MviView
 import io.reactivex.Observable
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>, AppCompatActivity() {
+
+    private val viewModel: IssuesSearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
