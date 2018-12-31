@@ -36,6 +36,10 @@ dependencies {
     implementation 'org.koin:koin-android:1.0.2'
     implementation 'org.koin:koin-android-viewmodel:1.0.2'
 
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.hannesdorfmann:adapterdelegates3:3.0.1'
+
     implementation "io.reactivex.rxjava2:rxjava:2.2.4"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
     implementation "io.reactivex.rxjava2:rxkotlin:2.3.0"
@@ -46,7 +50,10 @@ dependencies {
 
     testImplementation 'com.github.andrzejchm.RESTMock:android:0.3.1'
     testImplementation 'org.robolectric:robolectric:4.1'
-
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+    testImplementation "androidx.test:core:1.1.0"
+    testImplementation "androidx.test.ext:junit:1.1.0"
+    testImplementation "androidx.test:runner:1.1.1"
     testImplementation 'junit:junit:4.12'
     testImplementation "org.koin:koin-test:1.0.2"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
