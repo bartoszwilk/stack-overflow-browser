@@ -8,13 +8,17 @@ class IssuesSearchViewStateReducer : BiFunction<IssuesSearchViewState, IssuesSea
         when (taskResult) {
             is IssuesSearchTaskResult.SuccessFirstPage -> previousState.copy(
                 isLoadingFirstPage = false,
-                searchResults = taskResult.items
+                searchResults = taskResult.items,
+                error = null
             )
             is IssuesSearchTaskResult.Error -> previousState.copy(
                 isLoadingFirstPage = false,
                 error = taskResult.error
             )
-            is IssuesSearchTaskResult.LoadingFirstPage -> previousState.copy(isLoadingFirstPage = true)
+            is IssuesSearchTaskResult.LoadingFirstPage -> previousState.copy(
+                isLoadingFirstPage = true,
+                error = null
+            )
             else -> throw IllegalArgumentException("Unhandled task result: $taskResult")
         }
 }
