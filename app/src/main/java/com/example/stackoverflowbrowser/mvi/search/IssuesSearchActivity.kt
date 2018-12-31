@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.example.stackoverflowbrowser.R
 import com.example.stackoverflowbrowser._base.mvi.MviView
 import com.example.stackoverflowbrowser.mvi.search.list.IssuesAdapter
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -17,6 +18,12 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
     private val viewModel: IssuesSearchViewModel by viewModel()
     private val issuesAdapter = IssuesAdapter()
     private val disposables = CompositeDisposable()
+    private val queryChangeIntent by lazy<Observable<IssuesSearchIntent>> {
+        RxSearchView.queryTextChanges(searchView)
+            .skipInitialValue()
+            .map { it.toString() }
+            .map(IssuesSearchIntent::Query)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +48,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
     }
 
     override val intents: Observable<IssuesSearchIntent>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = queryChangeIntent
 
     override fun render(state: IssuesSearchViewState) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

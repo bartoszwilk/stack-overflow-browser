@@ -19,7 +19,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             addDelegate(ISSUE_ITEM_TYPE, IssueAdapterDelegate())
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         delegatesManager.onCreateViewHolder(parent, viewType)
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) =
