@@ -22,7 +22,7 @@ class IssueViewHolderTest {
             .inflate(R.layout.viewholder_issue, null)
     }
     val viewHolder by lazy { IssueViewHolder(itemView) }
-    val issueItem = IssueItem(Issue("testTitle", 123, Owner("testName", null)))
+    val issueItem = IssueListItem(Issue("testTitle", 123, Owner("testName", null)))
 
     @After
     fun tearDown() {

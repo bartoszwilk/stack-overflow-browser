@@ -25,5 +25,8 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) =
         delegatesManager.onBindViewHolder(items, position, viewHolder)
 
+    override fun getItemViewType(position: Int) =
+        delegatesManager.getItemViewType(items, position)
+
     override fun getItemCount() = items.size
 }

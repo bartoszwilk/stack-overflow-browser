@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.viewholder_issue.view.*
 
 class IssueViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(item: IssueItem) {
+    fun bind(item: IssueListItem) {
         val issue = item.issue
         with(itemView) {
             title.text = issue.title

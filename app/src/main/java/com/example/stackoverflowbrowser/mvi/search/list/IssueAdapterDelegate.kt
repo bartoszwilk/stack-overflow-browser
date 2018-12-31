@@ -24,6 +24,6 @@ class IssueAdapterDelegate : AdapterDelegate<List<ListItem>>() {
         position: Int,
         viewHolder: RecyclerView.ViewHolder,
         payloads: MutableList<Any>
-    ) = (viewHolder as IssueViewHolder).bind(items[position] as IssueItem)
+    ) = (viewHolder as IssueViewHolder).bind(items[position] as IssueListItem)
 
 }
