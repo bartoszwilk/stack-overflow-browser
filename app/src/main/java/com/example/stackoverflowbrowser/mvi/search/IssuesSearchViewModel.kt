@@ -5,7 +5,7 @@ import com.example.stackoverflowbrowser._base.mvi.MviViewModel
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class IssuesSearchViewModel(private val interactor: IssuesSearchInteractor) :
+class IssuesSearchViewModel(interactor: IssuesSearchInteractor) :
     MviViewModel<IssuesSearchIntent, IssuesSearchViewState>,
     ViewModel() {
 
