@@ -24,5 +24,9 @@ class IssuesSearchViewModel(interactor: IssuesSearchInteractor) :
             .replay(1)
             .autoConnect(0)
 
-    private fun IssuesSearchIntent.mapToAction(): IssuesSearchAction = TODO("not implemented")
+    private fun IssuesSearchIntent.mapToAction() =
+        when {
+            this is IssuesSearchIntent.Query -> IssuesSearchAction.Search(query)
+            else -> throw IllegalArgumentException("No such intent: $this")
+        }
 }
