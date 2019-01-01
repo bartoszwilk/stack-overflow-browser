@@ -3,11 +3,14 @@ package com.example.stackoverflowbrowser.mvi.search
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import com.example.stackoverflowbrowser.R
 import com.example.stackoverflowbrowser._base.mvi.MviView
 import com.example.stackoverflowbrowser.mvi.search.list.IssueListItem
 import com.example.stackoverflowbrowser.mvi.search.list.IssuesAdapter
+import com.example.stackoverflowbrowser.util.extension.isScrollDown
+import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.tomasznajda.ktx.android.gone
 import com.tomasznajda.ktx.android.visible
@@ -16,6 +19,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_search.*
 import org.koin.android.viewmodel.ext.android.viewModel
+
+const val LOAD_NEXT_PAGE_THRESHOLD = 4
 
 class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>, AppCompatActivity() {
 
@@ -28,9 +33,22 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
             .map { it.toString() }
             .map(IssuesSearchIntent::Query)
     }
+    private val loadMoreIntent by lazy<Observable<IssuesSearchIntent>> {
+        RxRecyclerView
+            .scrollEvents(issueList)
+            .filter { it.isScrollDown }
+            .filter { issuesAdapter.isLoading.not() }
+            .map { issuesAdapter.items.size }
+            .filter { adapterItemsCount ->
+                issueList.lastCompletelyVisibleItemPosition == adapterItemsCount - LOAD_NEXT_PAGE_THRESHOLD
+            }
+            .distinctUntilChanged()
+            .map { searchView.query.toString() }
+            .map(IssuesSearchIntent::LoadNextPage)
+    }
 
     override val intents: Observable<IssuesSearchIntent>
-        get() = queryChangeIntent
+        get() = Observable.merge(queryChangeIntent, loadMoreIntent)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +68,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
     }
 
     override fun render(state: IssuesSearchViewState) {
+        issuesAdapter.isLoading = state.isLoadingNextPage
         with(state) {
             error?.let {
                 loadingView.gone()
@@ -76,4 +95,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
         issueList.adapter = issuesAdapter
         issueList.layoutManager = LinearLayoutManager(this)
     }
+
+    private val RecyclerView.lastCompletelyVisibleItemPosition: Int
+        get() = (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
 }
