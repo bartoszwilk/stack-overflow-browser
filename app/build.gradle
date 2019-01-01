@@ -62,6 +62,7 @@ dependencies {
 
     testImplementation 'com.github.andrzejchm.RESTMock:android:0.3.1'
     testImplementation 'org.robolectric:robolectric:4.1'
+    testImplementation 'org.robolectric:shadows-supportv4:4.1'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
     testImplementation "androidx.test:core:1.1.0"
     testImplementation "androidx.test.ext:junit:1.1.0"

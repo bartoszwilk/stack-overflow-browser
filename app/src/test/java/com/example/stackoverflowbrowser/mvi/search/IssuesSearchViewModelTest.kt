@@ -28,8 +28,10 @@ class IssuesSearchViewModelTest {
 
     @Test
     fun `Query intent emits expected states when data source emits issues`() {
-        whenever(dataSource.getPage("testQuery", 1, 20)).thenReturn(
-            Observable.just(listOf(createIssue(0), createIssue(1), createIssue(2)))
+        mockIssuesResults(
+            query = "testQuery",
+            page = 1,
+            issues = listOf(createIssue(0), createIssue(1), createIssue(2))
         )
         val statesObserver = viewModel.states.test()
         intentEvents.onNext(IssuesSearchIntent.Query("testQuery"))
@@ -153,6 +155,28 @@ class IssuesSearchViewModelTest {
                     createIssue(6)
                 )
             )
+        )
+    }
+
+    @Test
+    fun `Refresh intent emits expected states when more than one page was loaded`() {
+        mockIssuesResults(query = "testQuery", page = 1, issues = listOf(createIssue(0)))
+        mockIssuesResults(query = "testQuery", page = 2, issues = listOf(createIssue(1)))
+        val statesObserver = viewModel.states.test()
+        intentEvents.onNext(IssuesSearchIntent.Query("testQuery"))
+        intentEvents.onNext(IssuesSearchIntent.LoadNextPage("testQuery"))
+        intentEvents.onNext(IssuesSearchIntent.Refresh("testQuery"))
+        statesObserver.assertValues(
+            IssuesSearchViewState.initial,
+            IssuesSearchViewState.initial.copy(isLoadingFirstPage = true),
+            IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0))),
+            IssuesSearchViewState.initial.copy(isLoadingNextPage = true, searchResults = listOf(createIssue(0))),
+            IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0), createIssue(1))),
+            IssuesSearchViewState.initial.copy(
+                isLoadingFirstPage = true,
+                searchResults = listOf(createIssue(0), createIssue(1))
+            ),
+            IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0)))
         )
     }
 

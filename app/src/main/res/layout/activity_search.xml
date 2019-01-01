@@ -19,8 +19,8 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"/>
 
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/issueList"
+    <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             tools:listitem="@layout/viewholder_issue"
@@ -31,7 +31,14 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp">
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/issueList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
             style="?android:attr/progressBarStyle"

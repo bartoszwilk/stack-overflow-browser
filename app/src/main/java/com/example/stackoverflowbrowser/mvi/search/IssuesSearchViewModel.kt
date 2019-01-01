@@ -38,6 +38,7 @@ class IssuesSearchViewModel(interactor: IssuesSearchInteractor) :
     private fun IssuesSearchIntent.mapToAction() =
         when {
             this is IssuesSearchIntent.Query -> IssuesSearchAction.Search(query)
+            this is IssuesSearchIntent.Refresh -> IssuesSearchAction.Search(query)
             this is IssuesSearchIntent.LoadNextPage -> IssuesSearchAction.LoadMore(query)
             else -> throw IllegalArgumentException("No such intent: $this")
         }

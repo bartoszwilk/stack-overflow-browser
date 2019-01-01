@@ -10,6 +10,7 @@ import com.example.stackoverflowbrowser._base.mvi.MviView
 import com.example.stackoverflowbrowser.mvi.search.list.IssueListItem
 import com.example.stackoverflowbrowser.mvi.search.list.IssuesAdapter
 import com.example.stackoverflowbrowser.util.extension.isScrollDown
+import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v7.widget.RxRecyclerView
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.tomasznajda.ktx.android.gone
@@ -46,9 +47,14 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
             .map { searchView.query.toString() }
             .map(IssuesSearchIntent::LoadNextPage)
     }
+    private val refreshIntent: Observable<IssuesSearchIntent>
+        get() = RxSwipeRefreshLayout
+            .refreshes(refreshLayout)
+            .map { searchView.query.toString() }
+            .map(IssuesSearchIntent::Refresh)
 
     override val intents: Observable<IssuesSearchIntent>
-        get() = Observable.merge(queryChangeIntent, loadMoreIntent)
+        get() = Observable.merge(queryChangeIntent, loadMoreIntent, refreshIntent)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +78,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
         with(state) {
             error?.let {
                 loadingView.gone()
+                refreshLayout.isRefreshing = false
                 Toast.makeText(this@IssuesSearchActivity, error.localizedMessage, Toast.LENGTH_SHORT).show()
             }
             if (isLoadingFirstPage) {
@@ -81,10 +88,12 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
             }
             if (searchResults?.isNotEmpty() == true) {
                 loadingView.gone()
+                refreshLayout.isRefreshing = false
                 emptyResultsInfo.gone()
                 issueList.visible()
                 issuesAdapter.items = searchResults.map(::IssueListItem)
             } else if (searchResults?.isEmpty() == true) {
+                refreshLayout.isRefreshing = false
                 loadingView.gone()
                 emptyResultsInfo.visible()
             }
