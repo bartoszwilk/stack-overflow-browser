@@ -55,6 +55,14 @@ class IssuesSearchViewModelTest {
     }
 
     @Test
+    fun `Query intent does not affect on states when query text has length less than 3`() {
+        mockIssuesResults(query = "te", page = 1, issues = listOf(createIssue(0), createIssue(1), createIssue(2)))
+        val statesObserver = viewModel.states.test()
+        intentEvents.onNext(IssuesSearchIntent.Query("te"))
+        statesObserver.assertValues(IssuesSearchViewState.initial)
+    }
+
+    @Test
     fun `LoadNextPage intent emits expected states when data source emits issues`() {
         mockIssuesResults(query = "testQuery", page = 1, issues = listOf(createIssue(0)))
         mockIssuesResults(

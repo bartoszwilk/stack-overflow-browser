@@ -26,6 +26,7 @@ class IssuesSearchInteractor(issuesDataSource: IssuesDataSource) :
 
     private val issuesSearchProcessor = ObservableTransformer<IssuesSearchAction.Search, IssuesSearchTaskResult> {
         it
+            .filter { it.query.length >= 3 }
             .flatMap { action ->
             issuesDataSource
                 .getPage(action.query, INITIAL_SEARCH_PAGE, SEARCH_RESULTS_PAGE_SIZE)
