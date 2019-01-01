@@ -10,13 +10,18 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<ListItem> = emptyList()
         set(value) {
-            field = value
+            field = value.toMutableList().apply {
+                if (isLoading) add(LoadingListItem)
+            }
             notifyDataSetChanged()
         }
+
+    var isLoading = false
 
     private val delegatesManager: AdapterDelegatesManager<List<ListItem>> =
         AdapterDelegatesManager<List<ListItem>>().apply {
             addDelegate(ISSUE_ITEM_TYPE, IssueAdapterDelegate())
+            addDelegate(LOADING_ITEM_TYPE, LoadingAdapterDelegate())
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
