@@ -129,6 +129,13 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
     }
 
     @Test
+    fun `state change hides list when search results are empty`() {
+        activity.issueList.visible()
+        stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = emptyList()))
+        assertTrue(activity.issueList.isGone)
+    }
+
+    @Test
     fun `state change disables refresh layout refreshing when results are empty`() {
         activity.refreshLayout.isRefreshing = true
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = emptyList()))

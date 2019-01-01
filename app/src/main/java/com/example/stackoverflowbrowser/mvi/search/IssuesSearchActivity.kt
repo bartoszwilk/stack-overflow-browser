@@ -101,6 +101,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
                 refreshLayout.isRefreshing = false
                 loadingView.gone()
                 emptyResultsInfo.visible()
+                issueList.gone()
             }
         }
     }
