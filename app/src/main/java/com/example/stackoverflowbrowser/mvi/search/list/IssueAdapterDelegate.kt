@@ -5,15 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.stackoverflowbrowser.R
 import com.example.stackoverflowbrowser._base.list.ListItem
+import com.example.stackoverflowbrowser.data.entity.Issue
 import com.hannesdorfmann.adapterdelegates3.AdapterDelegate
+import io.reactivex.subjects.Subject
 
-class IssueAdapterDelegate : AdapterDelegate<List<ListItem>>() {
+class IssueAdapterDelegate(val issueClicks: Subject<Issue>) : AdapterDelegate<List<ListItem>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup) =
         IssueViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.viewholder_issue, parent, false)
+                .inflate(R.layout.viewholder_issue, parent, false),
+            issueClicks
         )
 
     override fun isForViewType(items: List<ListItem>, position: Int) =

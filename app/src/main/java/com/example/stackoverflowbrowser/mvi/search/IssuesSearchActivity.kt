@@ -18,14 +18,18 @@ import com.tomasznajda.ktx.android.visible
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_search.*
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import pl.wp.videostar.viper.web.WebStarter
 
 const val LOAD_NEXT_PAGE_THRESHOLD = 4
 
 class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>, AppCompatActivity() {
 
     private val viewModel: IssuesSearchViewModel by viewModel()
+    private val webStarter: WebStarter by inject()
     private val issuesAdapter = IssuesAdapter()
     private val disposables = CompositeDisposable()
     private val queryChangeIntent by lazy<Observable<IssuesSearchIntent>> {
@@ -66,6 +70,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
         super.onStart()
         viewModel.states.subscribe(::render).addTo(disposables)
         viewModel.processIntents(intents)
+        subscribeForIssueClicks()
     }
 
     override fun onStop() {
@@ -104,6 +109,13 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
         issueList.adapter = issuesAdapter
         issueList.layoutManager = LinearLayoutManager(this)
     }
+
+    //This is not a proper solution for starting new screen. It's going to be improved in the near future.
+    private fun subscribeForIssueClicks() =
+        issuesAdapter
+            .issueClicks
+            .subscribeBy(onNext = { webStarter.start(this, it.url) })
+            .addTo(disposables)
 
     private val RecyclerView.lastCompletelyVisibleItemPosition: Int
         get() = (layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()

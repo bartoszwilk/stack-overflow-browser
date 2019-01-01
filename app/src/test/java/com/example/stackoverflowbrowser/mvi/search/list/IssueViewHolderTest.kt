@@ -3,7 +3,9 @@ package com.example.stackoverflowbrowser.mvi.search.list
 import android.view.LayoutInflater
 import androidx.test.core.app.ApplicationProvider
 import com.example.stackoverflowbrowser.R
+import com.example.stackoverflowbrowser.data.entity.Issue
 import com.example.stackoverflowbrowser.test_util.factory.createIssue
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.viewholder_issue.view.*
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -19,7 +21,8 @@ class IssueViewHolderTest : AutoCloseKoinTest() {
             .from(ApplicationProvider.getApplicationContext())
             .inflate(R.layout.viewholder_issue, null)
     }
-    val viewHolder by lazy { IssueViewHolder(itemView) }
+    val issueClicks = PublishSubject.create<Issue>()
+    val viewHolder by lazy { IssueViewHolder(itemView, issueClicks) }
     val issueItem = IssueListItem(createIssue(123))
 
     @Test
@@ -62,5 +65,14 @@ class IssueViewHolderTest : AutoCloseKoinTest() {
     fun `bind binds answersCount to expected view when answersCount is plural number`() {
         viewHolder.bind(issueItem)
         assertEquals("123 comments", itemView.answersCount.text)
+    }
+
+    @Test
+    fun `bind observers for itemView clicks`() {
+        viewHolder.bind(issueItem)
+        val testObserver = viewHolder.issueClicks.test()
+        testObserver.assertNoValues()
+        itemView.performClick()
+        testObserver.assertValue(createIssue(123))
     }
 }

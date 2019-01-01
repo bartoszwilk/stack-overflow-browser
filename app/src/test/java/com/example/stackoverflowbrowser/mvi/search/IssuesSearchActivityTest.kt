@@ -4,6 +4,7 @@ import com.example.stackoverflowbrowser.mvi.search.list.IssueListItem
 import com.example.stackoverflowbrowser.mvi.search.list.IssuesAdapter
 import com.example.stackoverflowbrowser.mvi.search.list.LoadingListItem
 import com.example.stackoverflowbrowser.test_util.factory.createIssue
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.tomasznajda.ktx.android.gone
 import com.tomasznajda.ktx.android.isGone
@@ -17,12 +18,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.standalone.inject
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.declareMock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowToast
 import org.robolectric.shadows.support.v4.Shadows
+import pl.wp.videostar.viper.web.WebStarter
 
 @RunWith(RobolectricTestRunner::class)
 class IssuesSearchActivityTest : AutoCloseKoinTest() {
@@ -30,12 +33,14 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
     val controller = Robolectric.buildActivity(IssuesSearchActivity::class.java)
     val activity: IssuesSearchActivity = controller.get()
     val viewModel: IssuesSearchViewModel by activity.viewModel()
+    val webStarter: WebStarter by inject()
     val stateChanges = PublishSubject.create<IssuesSearchViewState>()
     val adapter by lazy { activity.issueList.adapter as IssuesAdapter }
 
     @Before
     fun setUp() {
         declareMock<IssuesSearchViewModel>()
+        declareMock<WebStarter>()
         whenever(viewModel.states).thenReturn(stateChanges)
         controller.setup()
     }
@@ -55,6 +60,17 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
         testObserver.assertNoValues()
         Shadows.shadowOf(activity.refreshLayout).onRefreshListener.onRefresh()
         testObserver.assertValue(IssuesSearchIntent.Refresh("testQuery"))
+    }
+
+    @Test
+    fun `issue clicks starts web activity with expected url`() {
+        stateChanges.onNext(
+            IssuesSearchViewState.initial.copy(
+                searchResults = listOf(createIssue(0), createIssue(1), createIssue(2))
+            )
+        )
+        activity.issueList.layoutManager?.findViewByPosition(1)?.performClick()
+        verify(webStarter).start(activity, "url1")
     }
 
     @Test
