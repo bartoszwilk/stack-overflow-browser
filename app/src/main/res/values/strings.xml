@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">StackOverflowBrowser</string>
     <string name="empty_search_results_info">Brak wyników wyszukiwania</string>
-</resources>
+    <plurals name="comments_amount">
+        <item quantity="one">%d comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals></resources>

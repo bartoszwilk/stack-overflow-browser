@@ -13,7 +13,7 @@ class IssueAdapterDelegate : AdapterDelegate<List<ListItem>>() {
         IssueViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.viewholder_issue, null)
+                .inflate(R.layout.viewholder_issue, parent, false)
         )
 
     override fun isForViewType(items: List<ListItem>, position: Int) =

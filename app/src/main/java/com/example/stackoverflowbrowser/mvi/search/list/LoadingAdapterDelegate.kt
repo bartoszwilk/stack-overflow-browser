@@ -13,7 +13,7 @@ class LoadingAdapterDelegate : AdapterDelegate<List<ListItem>>() {
         LoadingViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.viewholder_loading, null)
+                .inflate(R.layout.viewholder_loading, parent, false)
         )
 
     override fun isForViewType(items: List<ListItem>, position: Int) =
