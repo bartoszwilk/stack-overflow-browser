@@ -5,11 +5,9 @@ import com.example.stackoverflowbrowser.data.source.remote.issue.mapper.IssuesRe
 import com.example.stackoverflowbrowser.data.source.remote.issue.request.SearchPagedIssuesApiRequest
 import com.example.stackoverflowbrowser.data.source.remote.util.RetrofitProvider
 
-class RemoteIssuesDataSource :
-    IssuesDataSource {
+class RemoteIssuesDataSource : IssuesDataSource {
 
     private val mapper = IssuesResponseModelToIssuesListMapper()
-
     private val retrofit = RetrofitProvider().retrofit
 
     override fun getPage(title: String, page: Int, pageSize: Int) =

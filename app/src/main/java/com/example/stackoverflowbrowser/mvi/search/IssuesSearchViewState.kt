@@ -7,11 +7,11 @@ data class IssuesSearchViewState(
     val isLoadingFirstPage: Boolean,
     val isLoadingNextPage: Boolean,
     val searchQuery: String?,
-    val searchResults: List<Issue>,
+    val searchResults: List<Issue>?,
     val error: Throwable?
 ) : MviViewState {
 
     companion object {
-        val initial = IssuesSearchViewState(false, false, null, emptyList(), null)
+        val initial = IssuesSearchViewState(false, false, null, null, null)
     }
 }

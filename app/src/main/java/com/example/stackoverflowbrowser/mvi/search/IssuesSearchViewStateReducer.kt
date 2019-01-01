@@ -4,8 +4,21 @@ import io.reactivex.functions.BiFunction
 
 class IssuesSearchViewStateReducer : BiFunction<IssuesSearchViewState, IssuesSearchTaskResult, IssuesSearchViewState> {
 
-    override fun apply(previousState: IssuesSearchViewState, taskResult: IssuesSearchTaskResult): IssuesSearchViewState {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
+    override fun apply(previousState: IssuesSearchViewState, taskResult: IssuesSearchTaskResult) =
+        when (taskResult) {
+            is IssuesSearchTaskResult.SuccessFirstPage -> previousState.copy(
+                isLoadingFirstPage = false,
+                searchResults = taskResult.items,
+                error = null
+            )
+            is IssuesSearchTaskResult.Error -> previousState.copy(
+                isLoadingFirstPage = false,
+                error = taskResult.error
+            )
+            is IssuesSearchTaskResult.LoadingFirstPage -> previousState.copy(
+                isLoadingFirstPage = true,
+                error = null
+            )
+            else -> throw IllegalArgumentException("Unhandled task result: $taskResult")
+        }
 }

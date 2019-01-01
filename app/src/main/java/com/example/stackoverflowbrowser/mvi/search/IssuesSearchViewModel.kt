@@ -5,7 +5,7 @@ import com.example.stackoverflowbrowser._base.mvi.MviViewModel
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class IssuesSearchViewModel(private val interactor: IssuesSearchInteractor) :
+class IssuesSearchViewModel(interactor: IssuesSearchInteractor) :
     MviViewModel<IssuesSearchIntent, IssuesSearchViewState>,
     ViewModel() {
 
@@ -24,5 +24,9 @@ class IssuesSearchViewModel(private val interactor: IssuesSearchInteractor) :
             .replay(1)
             .autoConnect(0)
 
-    private fun IssuesSearchIntent.mapToAction(): IssuesSearchAction = TODO("not implemented")
+    private fun IssuesSearchIntent.mapToAction() =
+        when {
+            this is IssuesSearchIntent.Query -> IssuesSearchAction.Search(query)
+            else -> throw IllegalArgumentException("No such intent: $this")
+        }
 }
