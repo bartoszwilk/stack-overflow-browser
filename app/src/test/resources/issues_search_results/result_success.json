@@ -23,7 +23,7 @@
       "last_activity_date": 1546176261,
       "creation_date": 1397406855,
       "question_id": 23045293,
-      "link": "https://stackoverflow.com/questions/23045293/how-to-convert-string-to-drawable-for-imageview-in-android",
+      "link": "url1",
       "title": "testTitle1"
     },
     {
@@ -50,7 +50,7 @@
       "creation_date": 1546119437,
       "last_edit_date": 1546119878,
       "question_id": 53973516,
-      "link": "https://stackoverflow.com/questions/53973516/android-app-shows-notification-in-background-but-gives-nullpointerexception-if-a",
+      "link": "url2",
       "title": "testTitle2"
     },
     {
@@ -73,7 +73,7 @@
       "last_activity_date": 1546175267,
       "creation_date": 1546175267,
       "question_id": 53977852,
-      "link": "https://stackoverflow.com/questions/53977852/was-the-componenttree-removed-in-android-studio-3-2",
+      "link": "url3",
       "title": "testTitle3"
     }
   ],

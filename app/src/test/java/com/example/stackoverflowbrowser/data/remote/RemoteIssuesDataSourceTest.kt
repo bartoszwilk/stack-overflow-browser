@@ -30,12 +30,14 @@ class RemoteIssuesDataSourceTest {
             QueryParam("intitle", "android"),
             QueryParam("site", "stackoverflow"),
             QueryParam("page", "5"),
-            QueryParam("pagesize", "20"))
-        RESTMockServer.whenGET(RequestMatchers.hasExactQueryParameters(*expectedParams)).thenReturnFile(200, FILE_RESPONSE_SUCCESS)
+            QueryParam("pagesize", "20")
+        )
+        RESTMockServer.whenGET(RequestMatchers.hasExactQueryParameters(*expectedParams))
+            .thenReturnFile(200, FILE_RESPONSE_SUCCESS)
         val expectedIssues = listOf(
-            Issue("testTitle1", 1, 3, false, Owner("Ricky Zheng", "profileImage1")),
-            Issue("testTitle2", 2, 1, true, Owner("Mark tester", null)),
-            Issue("testTitle3", 0, 4, false, Owner("bibscy", "profileImage3"))
+            Issue("testTitle1", 1, 3, false, "url1", Owner("Ricky Zheng", "profileImage1")),
+            Issue("testTitle2", 2, 1, true, "url2", Owner("Mark tester", null)),
+            Issue("testTitle3", 0, 4, false, "url3", Owner("bibscy", "profileImage3"))
         )
         dataSource.getPage("android", 5, 20)
             .test()

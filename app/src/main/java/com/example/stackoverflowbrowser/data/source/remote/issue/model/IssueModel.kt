@@ -7,5 +7,6 @@ data class IssueModel(
     val score: Int?,
     @SerializedName("is_answered") val isResolved: Boolean?,
     @SerializedName("answer_count") val answersCount: Int?,
+    @SerializedName("link") val url: String?,
     val owner: OwnerModel?
 )

@@ -10,5 +10,6 @@ fun createIssue(salt: Int) =
         answersCount = salt,
         owner = Owner("name$salt", "avatarUrl$salt"),
         score = salt,
+        url = "url$salt",
         isResolved = (salt % 2 == 0)
     )
