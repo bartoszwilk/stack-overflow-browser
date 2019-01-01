@@ -12,8 +12,20 @@ class IssueModelToIssueMapper : Mapper<IssueModel, Issue>() {
         from.owner
             ?.let { ownerModelToOwnerMapper.mapOrReturnNull(it) }
             ?.let { from.filterNulls() to it }
-            ?.let { (issue, owner) -> Issue(issue!!.title!!, issue.answersCount!!, owner) }
+            ?.let { (issue, owner) ->
+                Issue(
+                    issue!!.title!!,
+                    issue.answersCount!!,
+                    issue.score!!,
+                    issue.isResolved!!,
+                    owner
+                )
+            }
 
     private fun IssueModel.filterNulls() =
-        if (title != null && answersCount != null) this else null
+        if (title != null &&
+            answersCount != null &&
+            score != null &&
+            isResolved != null
+        ) this else null
 }

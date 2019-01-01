@@ -8,5 +8,7 @@ fun createIssue(salt: Int) =
     Issue(
         title = "title$salt",
         answersCount = salt,
-        owner = Owner("name$salt", "avatarUrl$salt")
+        owner = Owner("name$salt", "avatarUrl$salt"),
+        score = salt,
+        isResolved = (salt % 2 == 0)
     )
