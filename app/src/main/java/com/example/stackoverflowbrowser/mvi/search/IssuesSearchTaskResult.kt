@@ -8,6 +8,6 @@ sealed class IssuesSearchTaskResult : MviResult {
     object LoadingFirstPage : IssuesSearchTaskResult()
     object LoadingNextPage : IssuesSearchTaskResult()
     data class SuccessFirstPage(val items: List<Issue>) : IssuesSearchTaskResult()
-    data class SuccessNextMore(val items: List<Issue>) : IssuesSearchTaskResult()
+    data class SuccessNextPage(val items: List<Issue>) : IssuesSearchTaskResult()
     data class Error(val error: Throwable) : IssuesSearchTaskResult()
 }

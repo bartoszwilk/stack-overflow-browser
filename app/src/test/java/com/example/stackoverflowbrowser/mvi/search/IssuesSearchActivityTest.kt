@@ -1,5 +1,8 @@
 package com.example.stackoverflowbrowser.mvi.search
 
+import com.example.stackoverflowbrowser.mvi.search.list.IssueListItem
+import com.example.stackoverflowbrowser.mvi.search.list.IssuesAdapter
+import com.example.stackoverflowbrowser.mvi.search.list.LoadingListItem
 import com.example.stackoverflowbrowser.test_util.factory.createIssue
 import com.nhaarman.mockitokotlin2.whenever
 import com.tomasznajda.ktx.android.gone
@@ -9,7 +12,7 @@ import com.tomasznajda.ktx.android.visible
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_search.*
 import org.junit.Assert
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,6 +30,7 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
     val activity: IssuesSearchActivity = controller.get()
     val viewModel: IssuesSearchViewModel by activity.viewModel()
     val stateChanges = PublishSubject.create<IssuesSearchViewState>()
+    val adapter by lazy { activity.issueList.adapter as IssuesAdapter }
 
     @Before
     fun setUp() {
@@ -109,6 +113,55 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
         activity.issueList.gone()
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0))))
         assertTrue(activity.issueList.isVisible)
+    }
+
+    @Test
+    fun `state change sets expected loading state on adapter when next page is loading`() {
+        adapter.isLoading = false
+        stateChanges.onNext(IssuesSearchViewState.initial.copy(isLoadingNextPage = true))
+        assertTrue(adapter.isLoading)
+    }
+
+    @Test
+    fun `state change sets expected loading state on adapter when next page is not being loaded`() {
+        adapter.isLoading = true
+        stateChanges.onNext(IssuesSearchViewState.initial.copy(isLoadingNextPage = false))
+        assertFalse(adapter.isLoading)
+    }
+
+    @Test
+    fun `state change adds loading item at the of the list when next page is loading`() {
+        assertEquals(0, adapter.items.size)
+        stateChanges.onNext(
+            IssuesSearchViewState.initial.copy(
+                isLoadingNextPage = true,
+                searchResults = listOf(createIssue(0), createIssue(1), createIssue(2), createIssue(3))
+            )
+        )
+        assertTrue(adapter.items.last() is LoadingListItem)
+    }
+
+    @Test
+    fun `state change does not add loading item to list when next page is not being loaded`() {
+        assertEquals(0, adapter.items.size)
+        stateChanges.onNext(
+            IssuesSearchViewState.initial.copy(
+                isLoadingNextPage = false,
+                searchResults = listOf(createIssue(0), createIssue(1), createIssue(2), createIssue(3))
+            )
+        )
+        assertFalse(adapter.items.last() is LoadingListItem)
+    }
+
+    @Test
+    fun `state change adds issue items to list when search results are not empty`() {
+        assertEquals(0, adapter.items.size)
+        stateChanges.onNext(
+            IssuesSearchViewState.initial.copy(
+                searchResults = listOf(createIssue(0), createIssue(1))
+            )
+        )
+        assertEquals(listOf(createIssue(0), createIssue(1)).map(::IssueListItem), adapter.items)
     }
 
 }
