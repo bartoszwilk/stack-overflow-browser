@@ -53,7 +53,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
     }
     private val refreshIntent: Observable<IssuesSearchIntent>
         get() = RxSwipeRefreshLayout
-            .refreshes(refreshLayout)
+            .refreshes(issueListContainer)
             .map { searchView.query.toString() }
             .map(IssuesSearchIntent::Refresh)
 
@@ -84,28 +84,28 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
             error?.let {
                 loadingView.gone()
                 startSearchingHint.gone()
-                refreshLayout.isRefreshing = false
+                issueListContainer.isRefreshing = false
                 Toast.makeText(this@IssuesSearchActivity, error.localizedMessage, Toast.LENGTH_SHORT).show()
             }
             if (isLoadingFirstPage) {
                 loadingView.visible()
-                issueList.gone()
+                issueListContainer.gone()
                 emptyResultsInfo.gone()
                 startSearchingHint.gone()
             }
             if (searchResults?.isNotEmpty() == true) {
                 loadingView.gone()
-                refreshLayout.isRefreshing = false
+                issueListContainer.isRefreshing = false
                 emptyResultsInfo.gone()
-                issueList.visible()
+                issueListContainer.visible()
                 startSearchingHint.gone()
                 issuesAdapter.items = searchResults.map(::IssueListItem)
             } else if (searchResults?.isEmpty() == true) {
-                refreshLayout.isRefreshing = false
+                issueListContainer.isRefreshing = false
                 loadingView.gone()
                 emptyResultsInfo.visible()
                 startSearchingHint.gone()
-                issueList.gone()
+                issueListContainer.gone()
             }
         }
     }

@@ -58,7 +58,7 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
         activity.searchView.setQuery("testQuery", false)
         val testObserver = activity.intents.test()
         testObserver.assertNoValues()
-        Shadows.shadowOf(activity.refreshLayout).onRefreshListener.onRefresh()
+        Shadows.shadowOf(activity.issueListContainer).onRefreshListener.onRefresh()
         testObserver.assertValue(IssuesSearchIntent.Refresh("testQuery"))
     }
 
@@ -89,9 +89,9 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
 
     @Test
     fun `state change disables refresh layout refreshing when error occurred`() {
-        activity.refreshLayout.isRefreshing = true
+        activity.issueListContainer.isRefreshing = true
         stateChanges.onNext(IssuesSearchViewState.initial.copy(error = Exception()))
-        assertFalse(activity.refreshLayout.isRefreshing)
+        assertFalse(activity.issueListContainer.isRefreshing)
     }
 
     @Test
@@ -115,10 +115,10 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `state change hides issue list view when first page is loading`() {
-        activity.issueList.visible()
+    fun `state change hides issue list container view when first page is loading`() {
+        activity.issueListContainer.visible()
         stateChanges.onNext(IssuesSearchViewState.initial.copy(isLoadingFirstPage = true))
-        assertTrue(activity.issueList.isGone)
+        assertTrue(activity.issueListContainer.isGone)
     }
 
     @Test
@@ -150,17 +150,17 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun `state change hides list when search results are empty`() {
-        activity.issueList.visible()
+    fun `state change hides list container when search results are empty`() {
+        activity.issueListContainer.visible()
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = emptyList()))
-        assertTrue(activity.issueList.isGone)
+        assertTrue(activity.issueListContainer.isGone)
     }
 
     @Test
     fun `state change disables refresh layout refreshing when results are empty`() {
-        activity.refreshLayout.isRefreshing = true
+        activity.issueListContainer.isRefreshing = true
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = emptyList()))
-        assertFalse(activity.refreshLayout.isRefreshing)
+        assertFalse(activity.issueListContainer.isRefreshing)
     }
 
     @Test
@@ -186,16 +186,16 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
 
     @Test
     fun `state change disables refresh layout refreshing when results are not empty`() {
-        activity.refreshLayout.isRefreshing = true
+        activity.issueListContainer.isRefreshing = true
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0))))
-        assertFalse(activity.refreshLayout.isRefreshing)
+        assertFalse(activity.issueListContainer.isRefreshing)
     }
 
     @Test
-    fun `state change shows issue list when search results are not empty`() {
-        activity.issueList.gone()
+    fun `state change shows issue list container when search results are not empty`() {
+        activity.issueListContainer.gone()
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0))))
-        assertTrue(activity.issueList.isVisible)
+        assertTrue(activity.issueListContainer.isVisible)
     }
 
     @Test
