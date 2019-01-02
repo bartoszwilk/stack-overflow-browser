@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">StackOverflowBrowser</string>
-    <string name="empty_search_results_info">Brak wyników wyszukiwania</string>
+    <string name="empty_search_results_info">No search results</string>
+    <string name="search_hint">Search for title</string>
     <plurals name="comments_amount">
         <item quantity="one">%d comment</item>
         <item quantity="other">%d comments</item>
