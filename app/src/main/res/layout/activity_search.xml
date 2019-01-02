@@ -9,9 +9,9 @@
         tools:context=".mvi.search.IssuesSearchActivity">
 
     <android.support.v7.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:id="@+id/searchView"
             app:queryHint="@string/search_hint"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,11 +42,12 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
-            style="?android:attr/progressBarStyle"
+            android:id="@+id/loadingView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyle"
             android:visibility="gone"
-            android:id="@+id/loadingView" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
@@ -56,6 +57,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+
+    <TextView
+            android:id="@+id/startSearchingHint"
+            android:text="@string/search_hint_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"

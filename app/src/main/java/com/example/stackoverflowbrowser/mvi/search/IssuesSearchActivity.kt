@@ -83,6 +83,7 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
         with(state) {
             error?.let {
                 loadingView.gone()
+                startSearchingHint.gone()
                 refreshLayout.isRefreshing = false
                 Toast.makeText(this@IssuesSearchActivity, error.localizedMessage, Toast.LENGTH_SHORT).show()
             }
@@ -90,17 +91,20 @@ class IssuesSearchActivity : MviView<IssuesSearchIntent, IssuesSearchViewState>,
                 loadingView.visible()
                 issueList.gone()
                 emptyResultsInfo.gone()
+                startSearchingHint.gone()
             }
             if (searchResults?.isNotEmpty() == true) {
                 loadingView.gone()
                 refreshLayout.isRefreshing = false
                 emptyResultsInfo.gone()
                 issueList.visible()
+                startSearchingHint.gone()
                 issuesAdapter.items = searchResults.map(::IssueListItem)
             } else if (searchResults?.isEmpty() == true) {
                 refreshLayout.isRefreshing = false
                 loadingView.gone()
                 emptyResultsInfo.visible()
+                startSearchingHint.gone()
                 issueList.gone()
             }
         }

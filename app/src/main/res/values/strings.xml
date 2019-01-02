@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">StackOverflowBrowser</string>
     <string name="empty_search_results_info">No search results</string>
+    <string name="search_hint_info">Tap the magnifying glass to search for issues</string>
     <string name="search_hint">Search for title</string>
     <plurals name="comments_amount">
         <item quantity="one">%d comment</item>
         <item quantity="other">%d comments</item>
-    </plurals></resources>
+    </plurals>
+</resources>

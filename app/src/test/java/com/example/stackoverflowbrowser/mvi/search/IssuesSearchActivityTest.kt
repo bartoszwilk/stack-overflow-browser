@@ -81,6 +81,13 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
     }
 
     @Test
+    fun `state change hides searching hint when error occurred`() {
+        activity.startSearchingHint.visible()
+        stateChanges.onNext(IssuesSearchViewState.initial.copy(error = Exception()))
+        assertTrue(activity.startSearchingHint.isGone)
+    }
+
+    @Test
     fun `state change disables refresh layout refreshing when error occurred`() {
         activity.refreshLayout.isRefreshing = true
         stateChanges.onNext(IssuesSearchViewState.initial.copy(error = Exception()))
@@ -98,6 +105,13 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
         activity.loadingView.gone()
         stateChanges.onNext(IssuesSearchViewState.initial.copy(isLoadingFirstPage = true))
         assertTrue(activity.loadingView.isVisible)
+    }
+
+    @Test
+    fun `state change hides searching hint when first page is loading`() {
+        activity.startSearchingHint.visible()
+        stateChanges.onNext(IssuesSearchViewState.initial.copy(isLoadingFirstPage = true))
+        assertTrue(activity.startSearchingHint.isGone)
     }
 
     @Test
@@ -119,6 +133,13 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
         activity.emptyResultsInfo.gone()
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = emptyList()))
         assertTrue(activity.emptyResultsInfo.isVisible)
+    }
+
+    @Test
+    fun `state change hides searching hint when search results are empty`() {
+        activity.startSearchingHint.visible()
+        stateChanges.onNext(IssuesSearchViewState.initial.copy(isLoadingFirstPage = true))
+        assertTrue(activity.startSearchingHint.isGone)
     }
 
     @Test
@@ -147,6 +168,13 @@ class IssuesSearchActivityTest : AutoCloseKoinTest() {
         activity.emptyResultsInfo.gone()
         stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0))))
         assertTrue(activity.loadingView.isGone)
+    }
+
+    @Test
+    fun `state change hides searching hint when search results are not empty`() {
+        activity.startSearchingHint.visible()
+        stateChanges.onNext(IssuesSearchViewState.initial.copy(searchResults = listOf(createIssue(0))))
+        assertTrue(activity.startSearchingHint.isGone)
     }
 
     @Test
